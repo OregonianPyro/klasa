@@ -107,7 +107,7 @@ class Store extends Collection {
 			} else {
 				Piece = (req => req.default || req)(require(loc));
 				delete require.cache[loc];
-        module.children.pop();
+				module.children.pop();
 			}
 			if (!isClass(Piece)) throw new TypeError(`Failed to load file '${loc}'. The exported structure is not a class.`);
 			piece = this.set(new Piece(this.client, this, file, directory));
