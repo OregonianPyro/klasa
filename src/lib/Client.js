@@ -38,7 +38,7 @@ try {
 }
 
 // external plugins
-const plugins = [];
+const plugins = new Set();
 
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
@@ -135,18 +135,11 @@ class KlasaClient extends Discord.Client {
 		 */
 
 		/**
-		 * The directory to the node_modules folder where Klasa exists
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.coreBaseDir = path.join(__dirname, '../');
-
-		/**
 		 * The directory where the user files are at
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.clientBaseDir = main ? path.resolve(process.cwd(), path.dirname(main)) : path.join(process.cwd(), 'src');
+		this.userBaseDirectory = main ? path.resolve(process.cwd(), path.dirname(main)) : path.join(process.cwd(), 'src');
 
 		/**
 		 * The console for this instance of klasa. You can disable timestamps, colors, and add writable streams as config options to configure this.
@@ -276,6 +269,9 @@ class KlasaClient extends Discord.Client {
 			.registerStore(this.extendables)
 			.registerStore(this.tasks)
 			.registerStore(this.arguments);
+
+		const coreDirectory = path.join(__dirname, '../');
+		for (const store of this.pieceStores.values()) store.registerCoreDirectory(coreDirectory);
 
 		/**
 		 * The Schedule that runs the tasks
@@ -439,7 +435,7 @@ class KlasaClient extends Discord.Client {
 	 * @chainable
 	 */
 	static use(mod) {
-		plugins.push(mod);
+		plugins.add(mod);
 		return this;
 	}
 
