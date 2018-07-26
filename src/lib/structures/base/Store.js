@@ -97,7 +97,7 @@ class Store extends Collection {
 	 * @param {string[]} file A string or array of strings showing where the file is located.
 	 * @returns {?Piece}
 	 */
-	load(directory, file) {
+	async load(directory, file) {
 		const loc = join(directory, ...file);
 		let piece = null;
 		try {
